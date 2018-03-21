@@ -9,6 +9,8 @@ before_install:
   - go get github.com/golang/dep/cmd/dep
 install:
   - $GOPATH/bin/dep ensure -v -vendor-only
+before_script:
+  - make mockgen
 script:
   - ./coverage.sh
 after_success:
