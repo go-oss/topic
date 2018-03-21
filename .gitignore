@@ -1,0 +1,13 @@
+.*
+!.gitignore
+
+# go
+vendor
+
+# mockgen
+mock.go
+
+# ci
+!.travis.yml
+!.codeclimate.yml
+coverage.txt
