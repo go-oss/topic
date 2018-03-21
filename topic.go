@@ -181,7 +181,7 @@ func (s *storeImpl) GetLastPushedAt(userIDs []uint64) (res []time.Time, err erro
 			}
 
 			lastPushedAt := time.Unix(unixTime, 0)
-			res = append(res, lastPushedAt.UTC())
+			res = append(res, lastPushedAt)
 		}
 	}
 

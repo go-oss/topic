@@ -47,7 +47,7 @@ func TestGetLastPushedAt_ValidatesLastPushedAtAfterSetData(t *testing.T) {
 	store := NewStore(testConfig)
 	testDataOne := []uint64{1, 2, 3, 4, 5}
 	testDataTwo := time.Date(2018, 1, 12, 0, 0, 0, 0, time.UTC)
-	expected := time.Date(2018, 1, 12, 0, 0, 0, 0, time.UTC)
+	expected := time.Date(2018, 1, 12, 0, 0, 0, 0, time.UTC).In(time.Local)
 
 	_, err := sharedClient.TxPipelined(func(pipe *redis.Pipeline) error {
 		for _, id := range testDataOne {
@@ -59,11 +59,13 @@ func TestGetLastPushedAt_ValidatesLastPushedAtAfterSetData(t *testing.T) {
 
 	actual, err := store.GetLastPushedAt([]uint64{1, 2, 3, 4, 5})
 	assert.Nil(err)
-	assert.Equal(expected, actual[0])
-	assert.Equal(expected, actual[1])
-	assert.Equal(expected, actual[2])
-	assert.Equal(expected, actual[3])
-	assert.Equal(expected, actual[4])
+	if assert.Len(actual, 5) {
+		assert.Equal(expected, actual[0])
+		assert.Equal(expected, actual[1])
+		assert.Equal(expected, actual[2])
+		assert.Equal(expected, actual[3])
+		assert.Equal(expected, actual[4])
+	}
 
 	// 他のテストケースに影響するため、ユーザID毎にハッシュにセットしたフィールドを削除する。
 	err = resetLastPushedAtKey(testDataOne)
@@ -79,9 +81,11 @@ func TestGetLastPushedAt_NotExistingKey(t *testing.T) {
 
 	actual, err := store.GetLastPushedAt(testDataOne)
 	assert.Nil(err)
-	assert.Equal(expected, actual[0])
-	assert.Equal(expected, actual[1])
-	assert.Equal(expected, actual[2])
+	if assert.Len(actual, 3) {
+		assert.Equal(expected, actual[0])
+		assert.Equal(expected, actual[1])
+		assert.Equal(expected, actual[2])
+	}
 
 	// 他のテストケースに影響するため、ユーザID毎にハッシュにセットしたフィールドを削除する。
 	err = resetLastPushedAtKey(testDataOne)
