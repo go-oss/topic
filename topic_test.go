@@ -47,7 +47,7 @@ func TestGetLastPushedAt_ValidatesLastPushedAtAfterSetData(t *testing.T) {
 	store := NewStore(testConfig)
 	testDataOne := []uint64{1, 2, 3, 4, 5}
 	testDataTwo := time.Date(2018, 1, 12, 0, 0, 0, 0, time.UTC)
-	expected := time.Date(2018, 1, 12, 9, 0, 0, 0, time.Local)
+	expected := time.Date(2018, 1, 12, 0, 0, 0, 0, time.UTC)
 
 	_, err := sharedClient.TxPipelined(func(pipe *redis.Pipeline) error {
 		for _, id := range testDataOne {
